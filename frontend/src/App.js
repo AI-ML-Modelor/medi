@@ -16,6 +16,11 @@ const App = () => {
   const [exerciseQuery, setExerciseQuery] = useState('');
   const [medicineResults, setMedicineResults] = useState(null);
   const [exerciseResults, setExerciseResults] = useState(null);
+  const [medicineSuggestions, setMedicineSuggestions] = useState([]);
+  const [exerciseSuggestions, setExerciseSuggestions] = useState([]);
+  const [showMedicineSuggestions, setShowMedicineSuggestions] = useState(false);
+  const [showExerciseSuggestions, setShowExerciseSuggestions] = useState(false);
+  const [allConditions, setAllConditions] = useState([]);
 
   const startDiagnosis = async () => {
     setIsLoading(true);
