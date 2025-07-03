@@ -201,6 +201,8 @@ const App = () => {
     setExerciseResults(null);
     setMedicineQuery('');
     setExerciseQuery('');
+    setShowMedicineSuggestions(false);
+    setShowExerciseSuggestions(false);
   };
 
   const NavigationBar = () => (
