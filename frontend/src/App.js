@@ -777,29 +777,64 @@ const App = () => {
             <p className="text-gray-600">Get personalized exercise and diet recommendations for your condition</p>
           </div>
 
-          <div className="flex gap-4 mb-8">
-            <input
-              type="text"
-              value={exerciseQuery}
-              onChange={(e) => setExerciseQuery(e.target.value)}
-              placeholder="Enter condition (e.g., diabetes, hypertension, arthritis)"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              disabled={isLoading}
-            />
-            <button
-              onClick={searchExercise}
-              disabled={isLoading || !exerciseQuery.trim()}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50"
-            >
-              {isLoading ? 'Searching...' : '🔍 Search'}
-            </button>
+          <div className="relative mb-8">
+            <div className="flex gap-4">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={exerciseQuery}
+                  onChange={(e) => handleExerciseInputChange(e.target.value)}
+                  onFocus={() => {
+                    if (exerciseQuery.length > 0) {
+                      setShowExerciseSuggestions(true);
+                    }
+                  }}
+                  placeholder="Type condition/symptom (e.g., diabetes, hypertension, arthritis, back pain)"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  disabled={isLoading}
+                />
+                
+                {showExerciseSuggestions && exerciseSuggestions.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    {exerciseSuggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        onClick={() => selectExerciseSuggestion(suggestion)}
+                        className="px-4 py-3 hover:bg-purple-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-150"
+                      >
+                        <div className="flex items-center">
+                          <span className="text-purple-600 mr-2">🔍</span>
+                          <span className="text-gray-800 capitalize">{suggestion}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <button
+                onClick={searchExercise}
+                disabled={isLoading || !exerciseQuery.trim()}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 min-w-[120px]"
+              >
+                {isLoading ? 'Searching...' : '🔍 Search'}
+              </button>
+            </div>
+            
+            {/* Click outside to close suggestions */}
+            {showExerciseSuggestions && (
+              <div 
+                className="fixed inset-0 z-5"
+                onClick={() => setShowExerciseSuggestions(false)}
+              ></div>
+            )}
           </div>
 
           {exerciseResults && (
             <div className="space-y-6">
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
                 <h3 className="text-xl font-semibold text-purple-800 mb-4">
-                  🏃‍♂️ Exercise & Diet Plan for: {exerciseResults.condition}
+                  🏃‍♂️ Exercise & Diet Plan for: <span className="capitalize">{exerciseResults.condition}</span>
                 </h3>
                 
                 {exerciseResults.exercises && (
@@ -807,8 +842,11 @@ const App = () => {
                     <h4 className="font-medium text-gray-800 mb-3">🏋️‍♂️ Recommended Exercises:</h4>
                     <div className="grid md:grid-cols-2 gap-3">
                       {exerciseResults.exercises.map((exercise, index) => (
-                        <div key={index} className="bg-white p-3 rounded border-l-4 border-purple-400">
-                          <span className="text-purple-700">{exercise}</span>
+                        <div key={index} className="bg-white p-4 rounded-lg border-l-4 border-purple-400 shadow-sm">
+                          <div className="flex items-start">
+                            <span className="text-purple-600 mr-3 text-lg">🏃‍♂️</span>
+                            <span className="text-purple-700 font-medium">{exercise}</span>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -820,8 +858,11 @@ const App = () => {
                     <h4 className="font-medium text-gray-800 mb-3">🥗 Diet Recommendations:</h4>
                     <div className="grid md:grid-cols-2 gap-3">
                       {exerciseResults.diet.map((dietItem, index) => (
-                        <div key={index} className="bg-white p-3 rounded border-l-4 border-green-400">
-                          <span className="text-green-700">{dietItem}</span>
+                        <div key={index} className="bg-white p-4 rounded-lg border-l-4 border-green-400 shadow-sm">
+                          <div className="flex items-start">
+                            <span className="text-green-600 mr-3 text-lg">🥗</span>
+                            <span className="text-green-700 font-medium">{dietItem}</span>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -831,23 +872,28 @@ const App = () => {
                 {exerciseResults.ai_suggestions && (
                   <div className="mb-6">
                     <h4 className="font-medium text-gray-800 mb-3">🤖 AI Recommendations:</h4>
-                    <div className="bg-white p-4 rounded border">
-                      <p className="text-gray-700">{exerciseResults.ai_suggestions}</p>
+                    <div className="bg-white p-4 rounded-lg border border-blue-200">
+                      <p className="text-gray-700 leading-relaxed">{exerciseResults.ai_suggestions}</p>
                     </div>
                   </div>
                 )}
 
                 {exerciseResults.description && (
                   <div className="mb-6">
-                    <h4 className="font-medium text-gray-800 mb-2">About the Condition:</h4>
-                    <p className="text-gray-700">{exerciseResults.description}</p>
+                    <h4 className="font-medium text-gray-800 mb-2">📋 About the Condition:</h4>
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <p className="text-gray-700">{exerciseResults.description}</p>
+                    </div>
                   </div>
                 )}
 
-                <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
-                  <p className="text-yellow-800 text-sm">
-                    ⚠️ {exerciseResults.disclaimer}
-                  </p>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex items-start">
+                    <span className="text-yellow-600 mr-2 text-lg">⚠️</span>
+                    <p className="text-yellow-800 text-sm font-medium">
+                      {exerciseResults.disclaimer}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
