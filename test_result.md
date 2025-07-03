@@ -152,15 +152,18 @@ backend:
 
   - task: "Session Management"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented MongoDB session storage with conversation history. Need to test session persistence and retrieval."
+      - working: true
+        agent: "testing"
+        comment: "Session management is working correctly. Sessions are successfully created, stored in MongoDB, and can be retrieved. The /session/{session_id} endpoint correctly returns session data with conversation history. User responses are properly recorded and maintained throughout the conversation."
 
 frontend:
   - task: "Akinator-like Question Interface"
