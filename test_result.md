@@ -122,15 +122,18 @@ backend:
 
   - task: "Medical Diagnosis API Endpoints"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created /start-diagnosis and /answer-question endpoints with session management. Need to test multi-turn conversation flow."
+      - working: true
+        agent: "testing"
+        comment: "API endpoints are working correctly. /start-diagnosis successfully initiates a new session and returns the first question. /answer-question correctly processes user responses and returns appropriate follow-up questions. The conversation flow works as expected through multiple turns."
 
   - task: "Medical Knowledge Base"
     implemented: true
