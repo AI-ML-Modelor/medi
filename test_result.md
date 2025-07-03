@@ -294,11 +294,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhanced Medical Knowledge Base"
-    - "OCR Document Processing"
-    - "Medicine Suggestion System"
-    - "Exercise & Diet Recommendation System"
     - "Enhanced Navigation & Multi-Section UI"
+    - "File Upload Interface"
+    - "Medicine Search Interface"
+    - "Exercise & Diet Interface"
+    - "Enhanced Results & Recommendations Display"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
