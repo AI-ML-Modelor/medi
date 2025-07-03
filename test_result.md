@@ -137,15 +137,18 @@ backend:
 
   - task: "Medical Knowledge Base"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Added medical conditions database with Common Cold, Migraine, Allergic Rhinitis, Anxiety Disorder, and Hypertension. Need to test recommendation system."
+      - working: true
+        agent: "testing"
+        comment: "Medical knowledge base is working correctly. The /conditions endpoint successfully returns all 5 medical conditions with their symptoms, medicines, exercises, and doctor specializations. Each condition has the expected structure and content."
 
   - task: "Session Management"
     implemented: true
