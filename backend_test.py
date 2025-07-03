@@ -34,7 +34,7 @@ class MedicalDiagnosisBackendTest(unittest.TestCase):
         
         conditions = response.json()
         self.assertIsInstance(conditions, list, "Conditions should be a list")
-        self.assertGreaterEqual(len(conditions), 5, "Should have at least 5 medical conditions")
+        self.assertGreaterEqual(len(conditions), 10, "Should have at least 10 medical conditions")
         
         # Verify condition structure
         for condition in conditions:
@@ -42,6 +42,7 @@ class MedicalDiagnosisBackendTest(unittest.TestCase):
             self.assertIn("symptoms", condition, "Condition should have symptoms")
             self.assertIn("medicines", condition, "Condition should have medicines")
             self.assertIn("exercises", condition, "Condition should have exercises")
+            self.assertIn("diet", condition, "Condition should have diet recommendations")
             self.assertIn("doctor_specialization", condition, "Condition should have doctor specialization")
             
         print(f"✅ Successfully retrieved {len(conditions)} medical conditions")
