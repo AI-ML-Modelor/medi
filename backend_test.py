@@ -367,6 +367,9 @@ def run_tests():
     test_suite.addTest(MedicalDiagnosisBackendTest('test_04_session_persistence'))
     test_suite.addTest(MedicalDiagnosisBackendTest('test_05_error_handling'))
     test_suite.addTest(MedicalDiagnosisBackendTest('test_06_gemini_integration'))
+    test_suite.addTest(MedicalDiagnosisBackendTest('test_07_medicine_suggestion_system'))
+    test_suite.addTest(MedicalDiagnosisBackendTest('test_08_exercise_diet_recommendation_system'))
+    test_suite.addTest(MedicalDiagnosisBackendTest('test_09_ocr_document_processing'))
     
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(test_suite)
