@@ -167,15 +167,18 @@ backend:
 
   - task: "Medicine Suggestion System"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "NEW FEATURE: Added /get-medicine-suggestions endpoint with comprehensive medicine database including dosages, precautions, and doctor specializations."
+      - working: true
+        agent: "testing"
+        comment: "Medicine suggestion system is working perfectly. The /get-medicine-suggestions endpoint successfully returns appropriate medicine recommendations for various conditions including diabetes, cold, migraine, and asthma. Each response includes the disease name, a list of medicines with dosages, doctor specialization, and a medical disclaimer. For unknown conditions, the system correctly falls back to AI-generated suggestions using Gemini, providing relevant information with appropriate disclaimers."
 
   - task: "Exercise & Diet Recommendation System"
     implemented: true
