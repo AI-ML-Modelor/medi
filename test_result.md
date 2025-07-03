@@ -182,15 +182,18 @@ backend:
 
   - task: "Exercise & Diet Recommendation System"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "NEW FEATURE: Added /get-exercise-suggestions endpoint with personalized exercise routines and diet plans for specific medical conditions."
+      - working: true
+        agent: "testing"
+        comment: "Exercise & Diet Recommendation System is working correctly. The /get-exercise-suggestions endpoint successfully returns appropriate exercise and diet recommendations for various conditions including diabetes, arthritis, hypertension, and depression. Each response includes the condition name, a list of recommended exercises, dietary guidelines, and a medical disclaimer. For unknown conditions like 'chronic fatigue syndrome', the system correctly falls back to AI-generated suggestions using Gemini, providing relevant and safe recommendations with appropriate disclaimers."
 
   - task: "Session Management"
     implemented: true
