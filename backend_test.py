@@ -5,7 +5,9 @@ import time
 import unittest
 import os
 import sys
+import base64
 from dotenv import load_dotenv
+from pathlib import Path
 
 # Load environment variables from frontend/.env to get the backend URL
 load_dotenv('/app/frontend/.env')
