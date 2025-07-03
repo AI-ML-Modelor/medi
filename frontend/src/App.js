@@ -639,70 +639,117 @@ const App = () => {
             <p className="text-gray-600">Search for medicine recommendations by disease or condition name</p>
           </div>
 
-          <div className="flex gap-4 mb-8">
-            <input
-              type="text"
-              value={medicineQuery}
-              onChange={(e) => setMedicineQuery(e.target.value)}
-              placeholder="Enter disease name (e.g., cold, headache, diabetes)"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={isLoading}
-            />
-            <button
-              onClick={searchMedicine}
-              disabled={isLoading || !medicineQuery.trim()}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50"
-            >
-              {isLoading ? 'Searching...' : '🔍 Search'}
-            </button>
+          <div className="relative mb-8">
+            <div className="flex gap-4">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={medicineQuery}
+                  onChange={(e) => handleMedicineInputChange(e.target.value)}
+                  onFocus={() => {
+                    if (medicineQuery.length > 0) {
+                      setShowMedicineSuggestions(true);
+                    }
+                  }}
+                  placeholder="Type disease/symptom (e.g., cold, headache, diabetes, fever)"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={isLoading}
+                />
+                
+                {showMedicineSuggestions && medicineSuggestions.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    {medicineSuggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        onClick={() => selectMedicineSuggestion(suggestion)}
+                        className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-150"
+                      >
+                        <div className="flex items-center">
+                          <span className="text-blue-600 mr-2">🔍</span>
+                          <span className="text-gray-800 capitalize">{suggestion}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <button
+                onClick={searchMedicine}
+                disabled={isLoading || !medicineQuery.trim()}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 min-w-[120px]"
+              >
+                {isLoading ? 'Searching...' : '🔍 Search'}
+              </button>
+            </div>
+            
+            {/* Click outside to close suggestions */}
+            {showMedicineSuggestions && (
+              <div 
+                className="fixed inset-0 z-5"
+                onClick={() => setShowMedicineSuggestions(false)}
+              ></div>
+            )}
           </div>
 
           {medicineResults && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
               <h3 className="text-xl font-semibold text-green-800 mb-4">
-                💊 Medicine Suggestions for: {medicineResults.disease}
+                💊 Medicine Suggestions for: <span className="capitalize">{medicineResults.disease}</span>
               </h3>
               
               {medicineResults.medicines && (
                 <div className="mb-4">
                   <h4 className="font-medium text-gray-800 mb-3">Recommended Medicines:</h4>
-                  <ul className="space-y-2">
+                  <div className="grid gap-3">
                     {medicineResults.medicines.map((medicine, index) => (
-                      <li key={index} className="bg-white p-3 rounded border-l-4 border-green-400">
-                        <span className="text-green-700 font-medium">{medicine}</span>
-                      </li>
+                      <div key={index} className="bg-white p-4 rounded-lg border-l-4 border-green-400 shadow-sm">
+                        <div className="flex items-start">
+                          <span className="text-green-600 mr-3 text-lg">💊</span>
+                          <div>
+                            <span className="text-green-700 font-medium text-lg">{medicine}</span>
+                          </div>
+                        </div>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
 
               {medicineResults.ai_suggestions && (
                 <div className="mb-4">
-                  <h4 className="font-medium text-gray-800 mb-3">AI Suggestions:</h4>
-                  <div className="bg-white p-4 rounded border">
-                    <p className="text-gray-700">{medicineResults.ai_suggestions}</p>
+                  <h4 className="font-medium text-gray-800 mb-3">🤖 AI Suggestions:</h4>
+                  <div className="bg-white p-4 rounded-lg border border-blue-200">
+                    <p className="text-gray-700 leading-relaxed">{medicineResults.ai_suggestions}</p>
                   </div>
                 </div>
               )}
 
               {medicineResults.description && (
                 <div className="mb-4">
-                  <h4 className="font-medium text-gray-800 mb-2">About the Condition:</h4>
-                  <p className="text-gray-700">{medicineResults.description}</p>
+                  <h4 className="font-medium text-gray-800 mb-2">📋 About the Condition:</h4>
+                  <div className="bg-blue-50 p-3 rounded-lg">
+                    <p className="text-gray-700">{medicineResults.description}</p>
+                  </div>
                 </div>
               )}
 
               {medicineResults.doctor_specialization && (
                 <div className="mb-4">
-                  <h4 className="font-medium text-gray-800 mb-2">👨‍⚕️ Consult:</h4>
-                  <p className="text-blue-700">{medicineResults.doctor_specialization}</p>
+                  <h4 className="font-medium text-gray-800 mb-2">👨‍⚕️ Recommended Doctor:</h4>
+                  <div className="bg-purple-50 p-3 rounded-lg">
+                    <p className="text-purple-700 font-medium">{medicineResults.doctor_specialization}</p>
+                  </div>
                 </div>
               )}
 
-              <div className="bg-red-50 border border-red-200 rounded p-3">
-                <p className="text-red-800 text-sm">
-                  ⚠️ {medicineResults.disclaimer}
-                </p>
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-start">
+                  <span className="text-red-600 mr-2 text-lg">⚠️</span>
+                  <p className="text-red-800 text-sm font-medium">
+                    {medicineResults.disclaimer}
+                  </p>
+                </div>
               </div>
             </div>
           )}
