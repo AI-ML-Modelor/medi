@@ -22,6 +22,83 @@ const App = () => {
   const [showExerciseSuggestions, setShowExerciseSuggestions] = useState(false);
   const [allConditions, setAllConditions] = useState([]);
 
+  // Load medical conditions for autocomplete
+  useEffect(() => {
+    const loadConditions = async () => {
+      try {
+        const response = await axios.get(`${API}/conditions`);
+        const conditions = response.data;
+        
+        // Create searchable terms from conditions
+        const searchTerms = [];
+        conditions.forEach(condition => {
+          // Add condition name
+          searchTerms.push(condition.name.toLowerCase());
+          
+          // Add symptoms
+          condition.symptoms.forEach(symptom => {
+            searchTerms.push(symptom.toLowerCase());
+          });
+        });
+        
+        // Add common medical terms
+        const commonTerms = [
+          'headache', 'fever', 'cough', 'cold', 'flu', 'stomach pain', 'back pain',
+          'chest pain', 'sore throat', 'runny nose', 'fatigue', 'dizziness',
+          'nausea', 'vomiting', 'diarrhea', 'constipation', 'rash', 'itching',
+          'shortness of breath', 'joint pain', 'muscle pain', 'swelling',
+          'high blood pressure', 'low blood pressure', 'diabetes', 'asthma',
+          'allergy', 'depression', 'anxiety', 'insomnia', 'heartburn',
+          'indigestion', 'bloating', 'weight loss', 'weight gain', 'hair loss'
+        ];
+        
+        setAllConditions([...new Set([...searchTerms, ...commonTerms])]);
+      } catch (error) {
+        console.error('Error loading conditions:', error);
+      }
+    };
+    
+    loadConditions();
+  }, []);
+
+  const handleMedicineInputChange = (value) => {
+    setMedicineQuery(value);
+    
+    if (value.length > 0) {
+      const suggestions = allConditions
+        .filter(condition => condition.includes(value.toLowerCase()))
+        .slice(0, 8);
+      setMedicineSuggestions(suggestions);
+      setShowMedicineSuggestions(true);
+    } else {
+      setShowMedicineSuggestions(false);
+    }
+  };
+
+  const handleExerciseInputChange = (value) => {
+    setExerciseQuery(value);
+    
+    if (value.length > 0) {
+      const suggestions = allConditions
+        .filter(condition => condition.includes(value.toLowerCase()))
+        .slice(0, 8);
+      setExerciseSuggestions(suggestions);
+      setShowExerciseSuggestions(true);
+    } else {
+      setShowExerciseSuggestions(false);
+    }
+  };
+
+  const selectMedicineSuggestion = (suggestion) => {
+    setMedicineQuery(suggestion);
+    setShowMedicineSuggestions(false);
+  };
+
+  const selectExerciseSuggestion = (suggestion) => {
+    setExerciseQuery(suggestion);
+    setShowExerciseSuggestions(false);
+  };
+
   const startDiagnosis = async () => {
     setIsLoading(true);
     try {
