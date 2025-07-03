@@ -210,9 +210,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Gemini LLM Integration"
-    - "Medical Diagnosis API Endpoints"
-    - "Session Management"
+    - "Akinator-like Question Interface"
+    - "Medical Diagnosis UI"
+    - "Results & Recommendations Display"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
